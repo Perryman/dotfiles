@@ -1,8 +1,13 @@
 #!/bin/bash
 
-
 ### TO USE RUN THIS COMMAND:
 ### curl https://github.com/Perryman/dotfiles/blob/f0372d4cb6f52a5586df336fd85837a7303e4d66/attackbox.sh && chmod +x attackbox.sh && attackbox.sh
+
+# Delete the symlink to /dev/null
+rm .bash_history
+# Create the file again
+touch .bash_history
+
 
 # Install fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
