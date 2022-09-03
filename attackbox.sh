@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### TO USE RUN THIS COMMAND:
-### curl https://raw.githubusercontent.com/Perryman/dotfiles/main/attackbox.sh && chmod +x attackbox.sh && attackbox.sh
+### wget https://raw.githubusercontent.com/Perryman/dotfiles/main/attackbox.sh && chmod +x attackbox.sh && ./attackbox.sh
 
 # Delete the symlink to /dev/null
 rm .bash_history
