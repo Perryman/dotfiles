@@ -1,0 +1,24 @@
+[global_config]
+  borderless = True
+[keybindings]
+  zoom_normal = ""
+  cycle_next = ""
+  cycle_prev = ""
+  go_up = ""
+  go_down = ""
+  go_left = ""
+  go_right = ""
+  close_term = ""
+  toggle_scrollbar = ""
+  close_window = ""
+  edit_window_title = Pause
+  edit_tab_title = ""
+  edit_terminal_title = ""
+  help = ""
+[profiles]
+  [[default]]
+    show_titlebar = False
+    scrollbar_position = hidden
+    scrollback_infinite = True
+    bold_is_bright = True
+[plugins]
