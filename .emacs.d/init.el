@@ -212,10 +212,33 @@ by Prelude.")
 ;;; init.el ends here
 (put 'scroll-left 'disabled nil)
 
+(remove-hook 'prog-mode-hook #'whitespace-mode) ; (global-whitespace-mode -1)
+
 ;; scheme
 (add-hook 'scheme-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'scheme-mode-hook #'rainbow-identifiers-mode)
 (add-hook 'scheme-mode-hook (lambda () (whitespace-mode -1)))
+(add-hook 'scheme-mode-hook (lambda () (comment-set-column 0)))
+
+;; Geiser
+;  hook rainbow delimiters, identifiers, and turn off whitespace
+(add-hook 'geiser-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'geiser-mode-hook #'rainbow-identifiers-mode)
+(add-hook 'geiser-mode-hook (lambda () (whitespace-mode -1)))
+
+;; Enable rainbow-identifiers globally
+(add-hook 'prog-mode-hook #'rainbow-identifiers-mode)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'geiser-repl-mode-hook #'rainbow-identifiers-mode)
+(add-hook 'geiser-repl-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'geiser-debug-mode-hook #'rainbow-identifiers-mode)
+(add-hook 'geiser-debug-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'lisp-interaction-mode-hook #'rainbow-identifiers-mode)
+(add-hook 'lisp-interaction-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'emacs-lisp-mode-hook #'rainbow-identifiers-mode)
+
+
 
 ;; Make .scm files use Scheme mode
 (add-to-list 'auto-mode-alist '("\\.scm\\'" . scheme-mode))
@@ -223,7 +246,9 @@ by Prelude.")
 (add-hook 'scheme-mode-hook
           (lambda ()
             (geiser-mode 1)
-            (run-geiser)))
+            (run-with-timer 0 nil (lambda () (run-geiser 'chez)))))
+
+(add-hook 'scheme-mode-hook 'auto-fill-mode)
 
 ;; Custom indentation rules for Scheme in Geiser
 (with-eval-after-load 'scheme
@@ -232,6 +257,9 @@ by Prelude.")
   ;;(put 'conj2 'scheme-indent-function 2) ;; conj2 clause pairing
   (setq comment-column 0) ;; semicolon comments can be at 0
   )
+
+(with-eval-after-load 'geizer-chez
+  (add-to-list 'geiser-chez-extra-keywords "defrel"))
 
 (with-eval-after-load 'elisp
   (setq comment-column 0) ;; semicolon comments 0 indent
@@ -286,7 +314,19 @@ by Prelude.")
 (add-hook 'after-change-major-mode-hook
           (lambda () (text-scale-set 4)))
 
-(setq-default comment-column 0)
+(setq-default comment-set-column 0)
+; (setq comment-column 0)
 ; set rainbow mode on by default for all non-text modes
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'prog-mode-hook 'rainbow-identifiers-mode)
+(add-hook 'prog-mode-hook 'auto-fill-mode)
+;; set company-idle-delay to 5 seconds
+(add-hook 'prog-mode-hook (lambda () (setq company-idle-delay 5)))
+
+(defalias 'sp-forward-sexp-newline-macro
+  (kmacro "C-M-f RET"))
+(global-set-key (kbd "C-,") 'sp-forward-sexp-newline-macro)
+(global-set-key (kbd "C-<") 'delete-indentation)
+(global-set-key (kbd "C-M-|") 'cycle-spacing)
+(global-aggressive-indent-mode 1)
+(setq-default fill-column 50)
